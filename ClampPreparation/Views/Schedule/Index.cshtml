@@ -1,0 +1,169 @@
+﻿@{
+    ViewData["Title"] = "查询排程资料";
+}
+<style>
+    html {
+        font-size: 1.7em;
+    }
+
+    #txtPaperGrade,
+    .card-header input {
+        width: 10%;
+        min-width: 100px;
+        display: inline-block;
+    }
+
+    #btnGenerateStats {
+        vertical-align: top;
+    }
+
+    .container-fluid {
+        padding: 0 !important;
+    }
+
+    .card-header,
+    .card-body {
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
+
+    #countdown {
+        color: #333;
+        text-align: center;
+        margin-left: 50px;
+    }
+</style>
+
+<div class="container-fluid px-4">
+    <div class="card mb-4">
+        <div class="card-header">
+            <i class="fas fa-table me-1"></i>
+            <span>排程信息</span>
+            <span id="countdown">30</span>
+            <form id="advSearchForm">
+                <div class="input-group mt-2">
+                    <select class="form-select" aria-label="Disabled select example" id="plantDbName">
+                        <option selected value="W6ctidb_main">下沙厂</option>
+                        <option value="T2ctidb_main">龙潭厂</option>
+                        <option value="T3ctidb_main">神冈厂</option>
+                        <option value="T6ctidb_main">路竹厂</option>
+                        <option value="T9ctidb_main">南崁厂</option>
+                        <option value="T10ctidb_main">云林厂</option>
+                    </select>
+                    <select class="form-select" aria-label="Disabled select example" id="corrugatorId">
+                        <option selected value="1">1线</option>
+                        <option value="2">2线</option>
+                    </select>
+                    <button type="button" class="btn btn-dark mt-2 w-50" style="margin-top:0 !important" id="btnSearch">查询</button>
+                </div>
+            </form>
+        </div>
+        <div class="card-body">
+            <table class="table" id="tblList">
+                <thead>
+                    <tr>
+                        <th scope="col">时间</th>
+                        <th scope="col">材配</th>
+                        <th scope="col">门幅</th>
+                        <th scope="col">贴合备料</th>
+                        <th scope="col">B芯备料</th>
+                        <th scope="col">B面备料</th>
+                        <th scope="col">A芯备料</th>
+                        <th scope="col">A面备料</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+                <tfoot></tfoot>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script id="tblList_tmp" type="text/x-jquery-tmpl">
+        <tr>
+            <td>${schDay}日${schHour}点</td>
+            <td>${gradeIDMount}</td>
+            <td>${width}</td>
+            <td>${dbGrade}* ${dbLen}</td>
+            <td>${bmGrade}* ${bmLen}</td>
+            <td>${blGrade}* ${blLen}</td>
+            <td>${amGrade}* ${amLen}</td>
+            <td>${alGrade}* ${alLen}</td>
+        </tr>
+    </script>
+
+    <script type="text/javascript">
+        // 点击查询
+        $(function () {
+            $("#btnSearch").on("click", function () {
+                GetSchedules();
+            });
+            $("#corrugatorId").on("change", function () {
+                GetSchedules();
+            });
+            $("#plantDbName").on("change", function () { 
+                GetSchedules();
+            });
+
+            // GetSchedules----start
+            function GetSchedules() {
+                showLoading();
+                seconds = initialSeconds;
+                var params = { 
+                    "corrugatorId": $("#corrugatorId").val(),
+                    "plantDbName": $("#plantDbName").val()
+                }
+                return $.ajax({
+                    url: '@Url.Action("GetSchedules", "Schedule")',
+                    method: "POST",
+                    dataType: 'json',
+                    data: params,
+                    success: function (response) {
+                        $("#tblList tbody").empty();
+                        $("#tblList_tmp").tmpl(response).appendTo("#tblList tbody")
+                    },
+                    complete: function () {
+                        hideLoading();
+                    }
+                });
+            } // GetSchedules----end
+
+            //-- start 倒计时
+            var initialSeconds = 30; // 倒计时初始值
+            var seconds = initialSeconds; // 当前秒数
+            // 倒计时方法
+            startCountdown(); // 启动倒计时
+            function startCountdown() {
+                seconds = initialSeconds; // 重置秒数
+                $("#countdown").text(seconds); // 更新显示
+                // 定时器逻辑
+                var interval = setInterval(function () {
+                    seconds--;
+                    $("#countdown").text(seconds);
+                    if (seconds <= 0) {
+                        clearInterval(interval); // 停止当前倒计时
+                        GetSchedules(); // 重新获取数据
+                        startCountdown(); // 重新开始倒计时
+                    }
+                }, 1000);
+            }
+            //-- end 倒计时
+
+            function showLoading() {
+                $("#tblList tbody").loading({
+                    message: '正在加载...'
+                });
+                $("#btnSearch").attr("disabled", true);
+            }
+            function hideLoading() {
+                $("#tblList tbody").loading("stop");
+                $("#btnSearch").attr("disabled", false);
+            }
+
+        }) // end $(function () {})
+
+        
+    </script>
+}

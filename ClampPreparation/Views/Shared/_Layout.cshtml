@@ -1,0 +1,82 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>抱车备料</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link href="~/admin-pages/css/style.min.css" rel="stylesheet" />
+    <link href="~/admin-pages/css/styles.css" rel="stylesheet" />
+    <link href="~/DataTables/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <link href="~/sweetalert2/css/sweetalert2.min.css" rel="stylesheet" />
+    <link href="~/sweetalert2/css/style.css" rel="stylesheet" />
+    <script src="~/admin-pages/js/all.js" crossorigin="anonymous"></script>
+
+</head>
+<body class="sb-nav-fixed sb-sidenav-toggled">
+<header>
+    <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
+        <!-- Navbar Brand-->
+        <a class="navbar-brand ps-3" href="@Url.Action("Index", "Schedule")">抱车备料</a>
+        <!-- Sidebar Toggle-->
+        <button class="btn btn-link btn-sm order-lg-0 me-4 me-lg-0 order-1" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>
+        <!-- Navbar Search-->
+        @*<form class="d-none d-md-inline-block form-inline me-0 me-md-3 my-2 my-md-0 ms-auto">
+            <div class="input-group">
+                <input class="form-control" type="text" placeholder="Search for..." aria-label="Search for..." aria-describedby="btnNavbarSearch" />
+                <button class="btn btn-primary" id="btnNavbarSearch" type="button"><i class="fas fa-search"></i></button>
+            </div>
+        </form>*@
+    </nav>
+</header>
+
+    <div id="layoutSidenav">
+        <div id="layoutSidenav_nav">
+            <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
+                <div class="sb-sidenav-menu">
+                    <div class="nav">
+                        <div class="sb-sidenav-menu-heading">抱车备料</div>
+                        <a class="nav-link" href="@Url.Action("Index","Schedule")">
+                            <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                            查看排程
+                        </a>
+                        
+                    </div>
+                </div>
+                <div class="sb-sidenav-footer">
+                    @*<div class="small">Logged in as:</div>
+                    Start Bootstrap*@
+                </div>
+            </nav>
+        </div>
+        <div id="layoutSidenav_content">
+            <main>
+                @RenderBody()
+            </main>
+            @*<footer class="py-4 bg-light mt-auto">
+            </footer>*@
+        </div>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+    <script src="~/admin-pages/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    <script src="~/admin-pages/js/scripts.js"></script>
+    <script src="~/admin-pages/js/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
+    <script src="~/admin-pages/js/datatables-simple-demo.js"></script>
+    <script src="~/DataTables/js/jquery.dataTables.min.js"></script>
+    <script src="~/js/jquery.tmpl.min.js"></script>
+    <script src="~/lib/My97DatePicker/WdatePicker.js"></script>
+    <script src="~/lodash/lodash.min.js"></script>
+    <script src="~/jquery-loading/jquery.loading.min.js"></script>
+    <script src="~/sweetalert2/js/sweetalert2.all.min.js"></script>
+    <script src="~/table2excel/jquery.table2excel.min.js"></script>
+    <script src="~/SheetJS/xlsx.full.min.js"></script>
+    <script src="~/echarts/echarts.min.js"></script>
+
+@await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
