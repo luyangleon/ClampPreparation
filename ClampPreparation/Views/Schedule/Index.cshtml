@@ -70,6 +70,8 @@
                         <th scope="col">B面备料</th>
                         <th scope="col">A芯备料</th>
                         <th scope="col">A面备料</th>
+                        <th scope="col">C芯备料</th>
+                        <th scope="col">C面备料</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -91,6 +93,8 @@
             <td>${blGrade}* ${blLen}</td>
             <td>${amGrade}* ${amLen}</td>
             <td>${alGrade}* ${alLen}</td>
+            <td>${cmGrade}* ${cmLen}</td>
+            <td>${clGrade}* ${clLen}</td>
         </tr>
     </script>
 
@@ -126,6 +130,7 @@
                     },
                     complete: function () {
                         hideLoading();
+                        startCountdown(); // 重新开始倒计时
                     }
                 });
             } // GetSchedules----end
@@ -134,18 +139,19 @@
             var initialSeconds = 30; // 倒计时初始值
             var seconds = initialSeconds; // 当前秒数
             // 倒计时方法
+            var interval;
             startCountdown(); // 启动倒计时
             function startCountdown() {
                 seconds = initialSeconds; // 重置秒数
                 $("#countdown").text(seconds); // 更新显示
                 // 定时器逻辑
-                var interval = setInterval(function () {
+                interval = setInterval(function () {
                     seconds--;
                     $("#countdown").text(seconds);
                     if (seconds <= 0) {
-                        clearInterval(interval); // 停止当前倒计时
+                        // clearInterval(interval); // 停止当前倒计时
                         GetSchedules(); // 重新获取数据
-                        startCountdown(); // 重新开始倒计时
+                        // startCountdown(); // 重新开始倒计时
                     }
                 }, 1000);
             }
@@ -156,10 +162,15 @@
                     message: '正在加载...'
                 });
                 $("#btnSearch").attr("disabled", true);
+                $("#plantDbName").attr("disabled", true);
+                $("#corrugatorId").attr("disabled", true);
+                clearInterval(interval); // 停止当前倒计时
             }
             function hideLoading() {
                 $("#tblList tbody").loading("stop");
                 $("#btnSearch").attr("disabled", false);
+                $("#plantDbName").attr("disabled", false);
+                $("#corrugatorId").attr("disabled", false);
             }
 
         }) // end $(function () {})
